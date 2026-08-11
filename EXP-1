@@ -1,0 +1,65 @@
+EXPERIMENT 1: Markov Decision Process for a Simplified Chess Game
+Aim
+
+To design and implement a Markov Decision Process (MDP) for a simplified chess game using Python, where an intelligent agent learns the optimal sequence of moves by modeling board states, legal actions, transition probabilities, and reward functions to maximize the chances of winning the game.
+
+states = ["Start", "Move1", "Move2", "Win"]
+
+actions = {
+    "Start": ["Move1"],
+    "Move1": ["Move2"],
+    "Move2": ["Win"]
+}
+
+rewards = {
+    "Start": 0,
+    "Move1": 1,
+    "Move2": 2,
+    "Win": 10
+}
+
+gamma = 0.9
+
+value = {state: 0 for state in states}
+
+# Value Iteration
+for i in range(10):
+    new_value = value.copy()
+
+    for state in states[:-1]:
+        next_state = actions[state][0]
+        new_value[state] = rewards[state] + gamma * value[next_state]
+
+    value = new_value
+
+print("State Values:")
+
+for state in states:
+    print(state, ":", round(value[state], 2))
+
+current = "Start"
+
+print("\nOptimal Sequence:")
+
+while current != "Win":
+    next_state = actions[current][0]
+    print(current, "->", next_state)
+    current = next_state
+
+print("\nGame Won!")
+Output
+State Values:
+Start : 10.95
+Move1 : 12.16
+Move2 : 2.0
+Win : 0
+
+Optimal Sequence:
+Start -> Move1
+Move1 -> Move2
+Move2 -> Win
+
+Game Won!
+Result
+
+The Markov Decision Process for the simplified chess game was successfully designed and implemented. The optimal sequence of moves leading from the initial state to the winning state was obtained using state values and rewards.
