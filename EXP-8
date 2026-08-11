@@ -1,0 +1,62 @@
+EXPERIMENT 8: Monte Carlo Prediction and Control for Robot Vacuum Cleaner
+Aim
+
+To implement Monte Carlo prediction and control methods for a robot vacuum cleaner to learn an efficient cleaning policy while minimizing energy consumption.
+
+import random
+
+states = ["Room1", "Room2", "Room3", "Clean"]
+actions = ["Move", "Clean"]
+
+q = {(s, a): 0 for s in states for a in actions}
+count = {(s, a): 0 for s in states for a in actions}
+
+for episode in range(500):
+
+    state = "Room1"
+    episode_data = []
+
+    while state != "Clean":
+
+        action = random.choice(actions)
+
+        if action == "Clean":
+            next_state = "Clean"
+            reward = 10
+        else:
+            next_state = "Room2" if state == "Room1" else "Room3"
+            reward = -1
+
+        episode_data.append((state, action, reward))
+        state = next_state
+
+    total = 0
+
+    for state, action, reward in reversed(episode_data):
+
+        total = reward + 0.9 * total
+
+        count[(state, action)] += 1
+
+        q[(state, action)] += (
+            total - q[(state, action)]
+        ) / count[(state, action)]
+
+print("Learned Cleaning Policy:")
+
+for state in states[:-1]:
+
+    best_action = max(
+        actions,
+        key=lambda a: q[(state, a)]
+    )
+
+    print(state, "->", best_action)
+Output
+Learned Cleaning Policy:
+Room1 -> Clean
+Room2 -> Clean
+Room3 -> Clean
+Result
+
+Monte Carlo prediction and control were successfully implemented for the robot vacuum cleaner. The robot learned a cleaning policy based on accumulated rewards while considering energy consumption.
