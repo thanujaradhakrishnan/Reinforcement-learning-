@@ -1,0 +1,47 @@
+EXPERIMENT 7: Dynamic Programming for Autonomous Taxi Routing
+Aim
+
+To implement Dynamic Programming algorithms for an autonomous taxi routing system to obtain the optimal driving policy.
+
+
+routes = {
+    "Home": [("A", 4), ("B", 7)],
+    "A": [("C", 3), ("Destination", 8)],
+    "B": [("C", 2), ("Destination", 5)],
+    "C": [("Destination", 2)]
+}
+
+states = ["Home", "A", "B", "C", "Destination"]
+
+value = {state: 0 for state in states}
+policy = {}
+
+for i in range(10):
+
+    for state in states[:-1]:
+
+        best = min(
+            routes[state],
+            key=lambda x: x[1] + value[x[0]]
+        )
+
+        policy[state] = best[0]
+        value[state] = best[1] + value[best[0]]
+
+print("Optimal Driving Policy:")
+
+for state in states[:-1]:
+    print(state, "->", policy[state])
+
+print("\nMinimum Travel Cost:", value["Home"])
+Output
+Optimal Driving Policy:
+Home -> A
+A -> C
+B -> C
+C -> Destination
+
+Minimum Travel Cost: 9
+Result
+
+Dynamic Programming was successfully implemented to obtain the optimal driving policy for the autonomous taxi. The minimum-cost route was determined as Home → A → C → Destination.
