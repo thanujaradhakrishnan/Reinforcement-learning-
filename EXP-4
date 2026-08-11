@@ -1,0 +1,57 @@
+EXPERIMENT 4: Bellman Equation for an Autonomous Delivery Robot
+Aim
+
+To implement Bellman equations for an autonomous delivery robot to determine the optimal path with minimum travel cost.
+
+states = ["Start", "A", "B", "C", "Goal"]
+
+paths = {
+    "Start": [("A", 2), ("B", 5)],
+    "A": [("C", 2), ("Goal", 7)],
+    "B": [("C", 1), ("Goal", 4)],
+    "C": [("Goal", 2)]
+}
+
+cost = {state: 0 for state in states}
+policy = {}
+
+# Bellman Equation
+for i in range(10):
+    for state in states[:-1]:
+        options = paths[state]
+        best = min(options, key=lambda x: x[1] + cost[x[0]])
+        policy[state] = best[0]
+        cost[state] = best[1] + cost[best[0]]
+
+print("Minimum Travel Cost:")
+for state in states:
+    print(state, ":", cost[state])
+
+# Display optimal path
+current = "Start"
+
+print("\nOptimal Path:")
+
+while current != "Goal":
+    next_state = policy[current]
+    print(current, "->", next_state)
+    current = next_state
+
+print("\nMinimum Total Travel Cost:", cost["Start"])
+Output
+Minimum Travel Cost:
+Start : 6
+A : 4
+B : 3
+C : 2
+Goal : 0
+
+Optimal Path:
+Start -> A
+A -> C
+C -> Goal
+
+Minimum Total Travel Cost: 6
+Result
+
+The Bellman equation was successfully implemented for the autonomous delivery robot, and the optimal path with minimum total travel cost was determined as Start → A → C → Goal, with a minimum travel cost of 6.
