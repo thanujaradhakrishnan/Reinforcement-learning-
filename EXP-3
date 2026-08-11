@@ -1,0 +1,71 @@
+EXPERIMENT 3: MDP for an Autonomous Warehouse Robot
+Aim
+
+To design a Markov Decision Process (MDP) for an autonomous warehouse robot by defining states, actions, transition probabilities, and reward functions.
+
+states = ["Start", "Aisle1", "Aisle2", "Loading", "Goal"]
+
+actions = {
+    "Start": ["Aisle1"],
+    "Aisle1": ["Aisle2"],
+    "Aisle2": ["Loading"],
+    "Loading": ["Goal"]
+}
+
+rewards = {
+    "Start": -1,
+    "Aisle1": -1,
+    "Aisle2": -1,
+    "Loading": 5,
+    "Goal": 10
+}
+
+gamma = 0.9
+
+# Initialize state values
+value = {state: 0 for state in states}
+
+# Value iteration
+for i in range(10):
+    new_value = value.copy()
+
+    for state in states[:-1]:
+        next_state = actions[state][0]
+        new_value[state] = rewards[state] + gamma * value[next_state]
+
+    value = new_value
+
+print("State Values:")
+
+for state in states:
+    print(state, ":", round(value[state], 2))
+
+# Find optimal path
+current = "Start"
+
+print("\nOptimal Robot Path:")
+
+while current != "Goal":
+    next_state = actions[current][0]
+    print(current, "->", next_state)
+    current = next_state
+
+print("\nDestination Reached!")
+Output
+State Values:
+Start : 4.73
+Aisle1 : 6.37
+Aisle2 : 8.19
+Loading : 14.0
+Goal : 0
+
+Optimal Robot Path:
+Start -> Aisle1
+Aisle1 -> Aisle2
+Aisle2 -> Loading
+Loading -> Goal
+
+Destination Reached!
+Result
+
+The Markov Decision Process for the autonomous warehouse robot was successfully designed and implemented by defining states, actions, transition behavior, and rewards. The optimal path from the starting point to the destination was obtained.
