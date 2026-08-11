@@ -1,0 +1,100 @@
+EXPERIMENT 2: Smart Home Robot Navigation using Reinforcement Learning
+Aim
+
+To develop a Reinforcement Learning agent for a smart home robot that learns optimal navigation through agent–environment interaction using Python.
+import numpy as np
+
+# Smart Home Grid
+grid = np.zeros((4, 4))
+
+start = (0, 0)
+goal = (3, 3)
+
+actions = [0, 1, 2, 3]   # Up, Down, Left, Right
+
+q_table = np.zeros((4, 4, 4))
+
+alpha = 0.8
+gamma = 0.9
+epsilon = 0.2
+
+for episode in range(500):
+
+    state = start
+
+    for step in range(50):
+
+        # Choose action
+        if np.random.random() < epsilon:
+            action = np.random.choice(actions)
+        else:
+            action = np.argmax(q_table[state[0], state[1]])
+
+        row, col = state
+
+        # Move robot
+        if action == 0 and row > 0:
+            next_state = (row - 1, col)
+        elif action == 1 and row < 3:
+            next_state = (row + 1, col)
+        elif action == 2 and col > 0:
+            next_state = (row, col - 1)
+        elif action == 3 and col < 3:
+            next_state = (row, col + 1)
+        else:
+            next_state = state
+
+        # Reward
+        if next_state == goal:
+            reward = 10
+        else:
+            reward = -1
+
+        # Update Q-value
+        old_value = q_table[row, col, action]
+        next_value = np.max(
+            q_table[next_state[0], next_state[1]]
+        )
+
+        q_table[row, col, action] = old_value + alpha * (
+            reward + gamma * next_value - old_value
+        )
+
+        state = next_state
+
+        if state == goal:
+            break
+
+# Display learned path
+state = start
+path = [state]
+
+for i in range(20):
+
+    action = np.argmax(q_table[state[0], state[1]])
+
+    row, col = state
+
+    if action == 0 and row > 0:
+        state = (row - 1, col)
+    elif action == 1 and row < 3:
+        state = (row + 1, col)
+    elif action == 2 and col > 0:
+        state = (row, col - 1)
+    elif action == 3 and col < 3:
+        state = (row, col + 1)
+
+    path.append(state)
+
+    if state == goal:
+        break
+
+print("Learned Optimal Path:")
+print(path)
+Output
+Learned Optimal Path:
+[(0, 0), (0, 1), (0, 2), (0, 3),
+ (1, 3), (2, 3), (3, 3)]
+Result
+
+The Reinforcement Learning agent was successfully developed and trained to navigate the smart home environment. The agent learned an optimal path from the starting position to the destination through repeated agent–environment interaction.
