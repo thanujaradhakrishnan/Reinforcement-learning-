@@ -1,0 +1,55 @@
+EXPERIMENT 6: Reinforcement Learning for Autonomous Robot Navigation
+Aim
+
+To develop and evaluate a Reinforcement Learning model for autonomous robot navigation using OpenAI Gym, TensorFlow/Keras, and Python.
+
+import gymnasium as gym
+import numpy as np
+
+env = gym.make("FrozenLake-v1")
+
+q_table = np.zeros((env.observation_space.n,
+                    env.action_space.n))
+
+alpha = 0.8
+gamma = 0.95
+epsilon = 0.1
+
+for episode in range(500):
+
+    state, info = env.reset()
+    done = False
+
+    while not done:
+
+        if np.random.random() < epsilon:
+            action = env.action_space.sample()
+        else:
+            action = np.argmax(q_table[state])
+
+        next_state, reward, terminated, truncated, info = env.step(action)
+
+        q_table[state, action] = q_table[state, action] + alpha * (
+            reward + gamma * np.max(q_table[next_state])
+            - q_table[state, action]
+        )
+
+        state = next_state
+        done = terminated or truncated
+
+print("Training completed successfully.")
+print("\nLearned Q-Table:")
+print(np.round(q_table, 2))
+
+env.close()
+Output
+Training completed successfully.
+
+Learned Q-Table:
+[[0.42 0.48 0.43 0.44]
+ [0.31 0.00 0.38 0.45]
+ ...
+]
+Result
+
+The Reinforcement Learning model was successfully developed and trained for autonomous robot navigation. The Q-table learned the values of different actions and helped the robot select better navigation actions.
