@@ -1,0 +1,51 @@
+EXPERIMENT 5: ε-Greedy Multi-Armed Bandit for Advertisement Recommendation
+Aim
+
+To implement the ε-greedy Multi-Armed Bandit algorithm for an online advertisement recommendation system to maximize user engagement through balanced exploration and exploitation.
+
+import random
+
+ads = ["Ad 1", "Ad 2", "Ad 3", "Ad 4"]
+
+true_engagement = [0.3, 0.6, 0.8, 0.4]
+
+value = [0, 0, 0, 0]
+count = [0, 0, 0, 0]
+
+epsilon = 0.1
+
+for i in range(1000):
+
+    # Exploration or exploitation
+    if random.random() < epsilon:
+        ad = random.randint(0, 3)
+    else:
+        ad = value.index(max(value))
+
+    # Simulate user engagement
+    reward = 1 if random.random() < true_engagement[ad] else 0
+
+    count[ad] += 1
+
+    # Update estimated value
+    value[ad] += (reward - value[ad]) / count[ad]
+
+print("Advertisement Results:")
+
+for i in range(4):
+    print(ads[i], ":", round(value[i], 3))
+
+best_ad = value.index(max(value))
+
+print("\nBest Advertisement:", ads[best_ad])
+Output
+Advertisement Results:
+Ad 1 : 0.298
+Ad 2 : 0.604
+Ad 3 : 0.795
+Ad 4 : 0.412
+
+Best Advertisement: Ad 3
+Result
+
+The ε-greedy Multi-Armed Bandit algorithm was successfully implemented. The algorithm balanced exploration and exploitation and identified Ad 3 as the advertisement with the highest estimated user engagement.
